@@ -15,8 +15,7 @@ export class ExportService {
 
         let body = JSON.stringify({"course_type" : course_type, "stage": stage, "export_id": export_id});
         let headers= new HttpHeaders({'Content-Type': 'application/json'});
-        // headers.append('Content-Type', 'application/json');
-        headers.append('responseType', ResponseContentType.Blob);
+        // headers.append('responseType', ResponseContentType.Blob);
         // const headers = new Headers({'Content-Type':  'application/octet-stream'});
         // const headers = new Headers({'Content-Type':'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
         //     'Content-Disposition' : 'attachment; filename=sheet.xlsx'});

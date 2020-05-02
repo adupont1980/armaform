@@ -26,15 +26,11 @@ export class FormService {
             if (step.type == "click_selection" || step.type == 'image_selection' || step.type == "multi_selection") {
 
                 let keyName = step.configuration.form_value.name;
-
-                // J'ajoute une seule fois la variable que va recevoir le formulaire
                 //check if variable is already in array
                 if (keyExists.indexOf(keyName) == -1){
                     this.arraySteps.push({[keyName]: ""});
                     keyExists.push(keyName);
                 }
-                // console.log("keyExists");
-                // console.log((keyExists));
                 // TODO voir si il faut relire les form_value dans ce cas car c'est un tableau et plus une variable
             }
 

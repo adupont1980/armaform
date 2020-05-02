@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { FormService } from "./Engine/form.service";
-
+declare var module: {
+  id: string;
+}
 @Component({
   moduleId: module.id,
   selector: 'app-root',

@@ -28,7 +28,7 @@ import {SaveService} from "./form/saveService";
                   <div class="pull-right" *ngIf="this.stepId == 1">
                     <span style="width: 20px; height:20px;" *ngFor="let language of _stepService.languages">
                          <button title="{{language}}"   (click)="changeLanguage(language)" style="background-color: transparent; border-width: 0px 0 0;">
-                            <img src="images/flags/{{language}}.png" />
+                            <img src="assets/images/flags/{{language}}.png" />
                          </button>
                     </span>
                  </div>
@@ -355,7 +355,7 @@ export class MainComponent implements OnInit {
                         if (typeof this._stepService.steps[this.indexStepObj].configuration.mail_id != 'undefined') {
                             // console.log(data._body)
                             /* SEND MAIL CONFIRMATION */
-                            this._mailService.sendMail(this._stepService.steps[this.indexStepObj].configuration.mail_id, data._body, this.appName)
+                            this._mailService.sendMail(this._stepService.steps[this.indexStepObj].configuration.mail_id, data["_body"], this.appName)
                                 .subscribe(
                                     mailState => {
                                         console.log(mailState);
@@ -470,71 +470,78 @@ export class MainComponent implements OnInit {
             /* TEMPORARY STEP_ID BECAUSE WE NEED TO WAIT FOR ASYNCHROUNOUS QUERY */
             var tmpNewstepId = this._stepService.steps[this.indexStepObj].step_id;
 
+            interface ObjLists {
+                "name": string, 
+                "list_fr": string,
+                "list_nl":string,
+                "list_en":string, 
+                "list_es":string,  
+                "loaded": boolean
+            }
+
             /* IF LIST BUTTON COMPONENT */
             // console.log("type component: " + this._stepService.steps[this.indexStepObj].type);
             switch (this._stepService.steps[this.indexStepObj].type) {
                 case 'click_selection':
 
-                    // console.log("indexStepObj : " + this.indexStepObj);
-                    // console.log('tmp_id : ' + this.tmp_id);
-                    // console.log(this.datas);
-                   // if (typeof this.datas[this.indexStepObj].loaded == 'undefined') {
-                        /* IF DATA ARE STORED IN A COLLECTION IN CONFIG FILE */
-                        if (typeof this._stepService.steps[this.indexStepObj].configuration.collection != 'undefined') {
+                    /* IF DATA ARE STORED IN A COLLECTION IN CONFIG FILE */
+                    if (typeof this._stepService.steps[this.indexStepObj].configuration.collection != 'undefined') {
                             // console.log("GET DATA FROM COLLECTION");
-                            var filterList = [];
-                            //for (var item of this._stepService.step) {
-                            //if (this._stepService.step[this.indexStepObj].step_id == tmpNewstepId) {
-                            var collectionName = this._stepService.steps[this.indexStepObj].configuration.collection.name;
-                            console.log(this._stepService.steps[this.indexStepObj]);
-                            /*
-                             TODO TESTER SI FILTER EXISTE DANS COLLECTION
-                             */
-                            // STEP_ID OU SE TROUVE LE NOM DE LA VARIABLE DE LA VALEUR A FILTRER
-                            let valueToFilter = this._stepService.steps[this.indexStepObj].configuration.collection.filter[0].step_id;
-                            // console.log(valueToFilter);
-                            // console.log(this._stepService.steps[this.indexStepObj].configuration.collection.filter[0].step_id);
-                            // console.log(this._formService);
+                        var filterList = [];
+                        //for (var item of this._stepService.step) {
+                        //if (this._stepService.step[this.indexStepObj].step_id == tmpNewstepId) {
+                        var collectionName = this._stepService.steps[this.indexStepObj].configuration.collection.name;
+                        console.log(this._stepService.steps[this.indexStepObj]);
+                        /*
+                            TODO TESTER SI FILTER EXISTE DANS COLLECTION
+                            */
+                        // STEP_ID OU SE TROUVE LE NOM DE LA VARIABLE DE LA VALEUR A FILTRER
+                        let valueToFilter = this._stepService.steps[this.indexStepObj].configuration.collection.filter[0].step_id;
 
-                            filterList = this._stepService.steps[this.indexStepObj].configuration.collection.filter;
+                        filterList = this._stepService.steps[this.indexStepObj].configuration.collection.filter;
 
-                            var valueToKeep = ''
-                            // SET NOM DE VARIABLE TO SAVE IN FORM SERVICE
-                            if (typeof this._stepService.steps[this.indexStepObj].configuration.collection.value != 'undefined') {
-                                valueToKeep = this._stepService.steps[this.indexStepObj].configuration.collection.value;
-                            }
-                            // console.log(this.tmp_id);
-                            this._collectionService.getDatas(collectionName, filterList, valueToKeep, 'btn')
-                                .then(data => {
-                                        // console.log(data);
-                                        var objLists = {"name": this._stepService.steps[this.indexStepObj].name, "list_fr":"","list_nl":"","list_en":"", "list_es":"",  "loaded": true};
-                                        objLists.list_fr = data;
-                                        objLists.list_nl = data;
-                                        objLists.list_es = data;
-                                        objLists.list_en = data;
+                        var valueToKeep = ''
+                        // SET NOM DE VARIABLE TO SAVE IN FORM SERVICE
+                        if (typeof this._stepService.steps[this.indexStepObj].configuration.collection.value != 'undefined') {
+                            valueToKeep = this._stepService.steps[this.indexStepObj].configuration.collection.value;
+                        }
+                        // console.log(this.tmp_id);
+                        this._collectionService.getDatas(collectionName, filterList, valueToKeep, 'btn')
+                            .then(data => {
+                                    let objLists : ObjLists = { 
+                                        "name": this._stepService.steps[this.indexStepObj].name, 
+                                        "list_fr":data.toString(),
+                                        "list_nl":data.toString(),
+                                        "list_en":data.toString(), 
+                                        "list_es":data.toString(),  
+                                        "loaded": true };
+                                    // objListslist_fr = data;
+                                    objLists.list_nl = data.toString() ;
+                                    objLists.list_es = data.toString();
+                                    objLists.list_en = data.toString() ;
 
-                                        for (let i in this.datas){
-                                            if (this.datas[i].name == this._stepService.steps[this.indexStepObj].name){
-                                                this.datas.splice(parseInt(i),1);
-                                        }
+                                    for (let i in this.datas){
+                                        if (this.datas[i].name == this._stepService.steps[this.indexStepObj].name){
+                                            this.datas.splice(parseInt(i),1);
                                     }
-                                        this.lists.push(data);
-                                        this.datas.push(objLists);
+                                }
+                                    this.lists.push(data);
+                                    this.datas.push(objLists);
 
-                                        this.previousStepId = this.stepId;
-                                        // this.stepId = this._stepService.step[this.indexStepObj].step_id;
-                                        // console.log(this.stepId);
-                                        this.stepId = tmpNewstepId;
+                                    this.previousStepId = this.stepId;
+                                    // this.stepId = this._stepService.step[this.indexStepObj].step_id;
+                                    // console.log(this.stepId);
+                                    this.stepId = tmpNewstepId;
 
-                                        // Skip the step if there is only 1 result
-                                        // console.log("TEST IF ONLY 1 RECORD");
-                                        // if (data.length == 1) {
-                                        //     this._formService.arraySteps[this.indexStepObj][this._stepService.steps[this.indexStepObj].configuration.form_value.name] = data[0];
-                                        //     this.goToNextStep(this.indexStepObj);
-                                        // }
-                                    },
-                                    error => console.log(error)
-                                );
+                                    // Skip the step if there is only 1 result
+                                    // console.log("TEST IF ONLY 1 RECORD");
+                                    // if (data.length == 1) {
+                                    //     this._formService.arraySteps[this.indexStepObj][this._stepService.steps[this.indexStepObj].configuration.form_value.name] = data[0];
+                                    //     this.goToNextStep(this.indexStepObj);
+                                    // }
+                                },
+                                error => console.log(error)
+                            );
                         }
                         //IF DATA ARE STORED IN A LIST IN CONFIG FILE
                         else {

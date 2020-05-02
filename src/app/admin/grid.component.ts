@@ -3,7 +3,6 @@ import {Component, Input, Output, EventEmitter} from '@angular/core'
 import {GridService} from "./grid.service";
 import {Router, NavigationExtras, ActivatedRoute} from '@angular/router';
 import {StepService} from "../Engine/step.service";
-// import {Http} from "@angular/http";
 import {ExportService} from "./export.service";
 @Component({
     selector: 'grid-panel',
@@ -192,6 +191,7 @@ console.log(this._gridService.colTitle)
                          // console.log(data)
                         console.log(this._gridService)
                         console.log(this._gridService.config)
+                        console.log(this._gridService.dataGrid);
                         if (typeof this._gridService.config.export !== 'undefined'){
                             this.export = this._gridService.config.export;
                         }

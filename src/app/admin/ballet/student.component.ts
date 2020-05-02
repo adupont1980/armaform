@@ -405,7 +405,7 @@ export class StudentComponent {
     student = {};
     student_info;
     studentGroup;
-    model;
+    model: Student;
     course_type;
     stage;
 
@@ -416,6 +416,8 @@ export class StudentComponent {
 
     durations = ["1","2","3", "NA"];
     duration = "NA";
+
+    
     ngOnInit()
     {
 
@@ -429,19 +431,19 @@ export class StudentComponent {
             .subscribe(data => {
                     this.student_info = data;
                     let token = localStorage.getItem('token');
-                    if (typeof data.duration != 'undefined') {
-                        this.duration = data.duration
+                    if (typeof data["duration"] != 'undefined') {
+                        this.duration = data["duration"]
                     }
 
                     this.model = new Student(
-                        data._id,data.DNI,data.BECA,
-                        data.father, data.intolerencia, data.email2,
-                        data.phone2, data.notes, token,
-                        data.course_type, data.audition, this.duration,
-                        data.age, data.profile[4].birthdate, data.group,
-                        data.profile[2].phone,data.profile[3].email, data.profile[6].city,
-                        data.profile[5].country, data.profile[7].studied_places,data.years_of_experience,
-                        data.residence, data.stage, data.registred);
+                        data["_id"],data["DNI"],data["BECA"],
+                        data["father"], data["intolerencia"], data["email2"],
+                        data["phone2"], data["notes"], token,
+                        data["course_type"], data["audition"], this.duration,
+                        data["age"], data["profile"][4].birthdate, data["group"],
+                        data["profile"][2].phone,data["profile"][3].email, data["profile"][6].city,
+                        data["profile"][5].country, data["profile"][7].studied_places,data["years_of_experience"],
+                        data["residence"], data["stage"], data["registred"]);
                     console.log(this.model);
                     this.display_edit = true;
                 },

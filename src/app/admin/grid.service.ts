@@ -2,6 +2,7 @@ import {Injectable} from "@angular/core";
 import { GlobalVariable } from "../global";
 // import {Http, Headers} from "@angular/http";
 // import { Observable } from "rxjs/Observable";
+import { map } from "rxjs/operators";
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 // import includes = require("core-js/fn/string/includes");
 
@@ -10,7 +11,7 @@ export class GridService {
 
     constructor (private _http: HttpClient) {}
 
-    dataGrid = [];
+    dataGrid : Array<any>;
     keysName = [];
     colTitle = [];
     keysName_details = [];
@@ -22,30 +23,33 @@ export class GridService {
     key;
     value;
 
-    getDatas(grid_name,valeur){
+    getDatas(grid_name: string, valeur: string){
         this.keysName = [];
         this.colTitle = [];
 
         let query = "grid_name="+grid_name+"&filter="+valeur;
         let completeUrl = GlobalVariable.BASE_URL+'data_grid?'+query;
         return this._http.get(completeUrl)
-            .map(response =>
-            {
-                let data = response.json();
-                console.log(data);
+        .pipe(
+                map( response =>
+                {
+                let data = response;
+                console.log(response)
+                console.log(data)
                 this.config = data[0];
 
                 // console.log(this.config);
                 // console.log(this.config.group);
                 // console.log(this.config.details_activated);
                 // console.log(this.config.removable);
-                for (var i in data[0].config){
+                for (let i in this.config["config"]){
                     // if (key != '_id' && key != 'step_id'){
                     // console.log(data[0].config[i]);
                     // console.lota[0].config[i] === "object"){
                     var result = "";
                     /* FIELDS PANEL */
-                    if(typeof data[0].config[i].field_panel_name != 'undefined' ) {
+
+                    if(typeof this.config["config"][i].field_panel_name !== 'undefined' ) {
                         //var j = 0;
                         for (var q in data[0].config[i].field_panel_values){
                             this.keysName.push(data[0].config[i].field_panel_name + '_' + data[0].config[i].field_panel_values[q].data);
@@ -96,7 +100,7 @@ export class GridService {
 
                                 filter_type = data[0].config[i].filter_type;
                                 let x = 0
-                                for (let filterValue of data){
+                                for (let filterValue of data[0].config){
                                     if (x == 0) { x++}
                                     else {
                                         if (data_combo.indexOf(filterValue[keyName]) == -1) {
@@ -145,15 +149,16 @@ export class GridService {
                                  "type": "field",
                                  "editable": data[0].config_details[i].editable})
                          }
+                         
                      }
                  }
-                data.shift();
                 // console.log(this.keysName);
                 // console.log(this.colTitle);
-                this.dataGrid = data;
+                this.dataGrid = Object.assign([], data);
                 this.originalData = this.dataGrid;
+                this.dataGrid.shift();
                 return 'ok'
-            })
+            }))
             // .catch(error => Observable.throw(error))
     }
 
@@ -163,7 +168,7 @@ export class GridService {
         const headers = new HttpHeaders({'Content-Type': 'application/json'});
         var completeUrl = GlobalVariable.BASE_URL + 'get_grids';
         return this._http.post(completeUrl, body, {headers: headers})
-            .toPromise().then(response => response.json())
+            .toPromise().then(response => response)
             // .catch(error => Observable.throw(error.json()));
     }
 
@@ -198,7 +203,7 @@ export class GridService {
         console.log('avant http')
         console.log(completeUrl)
         return this._http.post(completeUrl, body, {headers: headers})
-            .toPromise().then(response => response.json())
+            .toPromise().then(response => response)
             // .catch(error => Observable.throw(error));
     }
 

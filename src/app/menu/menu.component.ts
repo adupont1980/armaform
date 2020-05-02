@@ -1,8 +1,8 @@
-import {Component, Input, Output, EventEmitter} from '@angular/core'
-import {StepService} from "../Engine/step.service";
-import {Router, ActivatedRoute, ParamMap} from '@angular/router';
-import {GridService} from "../admin/grid.service";
-import {AuthService} from "../auth/auth.service";
+import { Component } from '@angular/core'
+import { StepService } from "../Engine/step.service";
+import { Router, ActivatedRoute } from '@angular/router';
+import { GridService } from "../admin/grid.service";
+import { AuthService } from "../auth/auth.service";
 @Component({
     selector: 'grid-panel',
     template: `
@@ -123,14 +123,15 @@ export class MenuComponent {
             }
         });
 
-        if (this.isLoggedIn() && this._stepService.steps[0].master_type == 'admin' || this.preMenu == 1)
+        if (this.isLoggedIn() && this._stepService.master_type == 'admin' || this.preMenu == 1)
         {
+            console.log(this._stepService)
 
-            this._gridService.getActivatedGrids(this._stepService.steps[0].master_name)
+            this._gridService.getActivatedGrids(this._stepService.master_name)
                 .then(
                     gridsList => {
-                        // console.log(gridsList)
-                        this.grids = gridsList;
+                        console.log(gridsList)
+                        this.grids = Object.assign([], gridsList);
 
                         for (let j = 0; j < this.grids.length; j++) {
                             // console.log(this.grids[j].name);
@@ -158,7 +159,7 @@ export class MenuComponent {
         }
         else
         {
-            if (this._stepService.steps[0].master_type == 'form' && this.firstLoad) {
+            if (this._stepService.master_type == 'form' && this.firstLoad) {
                 this.router.navigate(['/step']);
             }
             else {

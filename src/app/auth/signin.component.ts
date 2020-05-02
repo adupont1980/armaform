@@ -37,7 +37,7 @@ import {Router, ActivatedRoute, ParamMap} from '@angular/router';
 })
 export class SigninComponent implements OnInit {
     myForm: FormGroup;
-    response = {"logged": true}
+    // response = {"logged": true}
     constructor(private _authService: AuthService, private router: Router,private route: ActivatedRoute) {}
     appName;
     private sub: any;
@@ -52,11 +52,11 @@ export class SigninComponent implements OnInit {
             .subscribe(
                 data => {
                     console.log(data)
-                    this.response = data;
-                    localStorage.setItem('token', data.token.$binary);
-                    localStorage.setItem('userId', data.user_id.$oid);
+                    // this.response = data;
+                    localStorage.setItem('token', data["token"].$binary);
+                    localStorage.setItem('userId', data["user_id"].$oid);
                     localStorage.setItem('app', this.appName);
-                    if (data.logged){
+                    if (data["logged"]){
                         // console.log(this.response)
                         this.router.navigate(['/menu', this.appName]);
                     }

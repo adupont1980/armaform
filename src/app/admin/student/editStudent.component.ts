@@ -4,7 +4,7 @@ import {Router, NavigationExtras, ActivatedRoute} from '@angular/router';
 // import {Http} from "@angular/http";
 import { HttpClient } from '@angular/common/http';
 // import {GroupService} from "group.service";
-import {forEach} from "../../../../public/js/vendor/@angular/router/src/utils/collection";
+// import {forEach} from "../../../../public/js/vendor/@angular/router/src/utils/collection";
 import {GridService} from "../grid.service";
 import {BalletDetailsService} from "../ballet/balletDetails.service";
 import {GroupService} from "../ballet/group.service";

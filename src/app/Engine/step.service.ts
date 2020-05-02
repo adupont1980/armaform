@@ -7,19 +7,22 @@ export class StepService {
 
     constructor (private _http: HttpClient) {}
 
-    steps: [];
+    master_name: string = 'default'
+    master_type: string = 'form'
+    steps: Array<any>;
     language = '';
     languages = [];
-    template: '';
+    template: 'form';
     menu_level = 0
 
-    getSteps(appName): Promise<void>{
-        var query = 'app_name=' +appName;
+    getSteps(appName:string): Promise<void>{
+        if (appName !== ' ') { this.master_name = 'ballet'; }
+        var query = 'app_name=' + this.master_name;
         var completeUrl = GlobalVariable.BASE_URL+'step?'+query;
         return this._http.get(completeUrl)
             .toPromise()
             .then(response => {
-                this.steps = response;
+                this.steps = Object.assign([], response);
                 this.language = response[0].default_language;
                 this.languages = response[0].languages;
                 this.template = response[0].design;
@@ -28,11 +31,9 @@ export class StepService {
                 this.steps.splice(0,1);
                 // console.log(window.location.hash);
                 if (window.location.hash == '#/admin'){
-                    this.steps[0].master_type = 'admin';
+                    this.master_type = 'admin';
                 }
-                else this.steps[0].master_type = 'form';
 
-                // consol e.log(this.steps)
         })
             .catch(error => console.log(error));
     }
